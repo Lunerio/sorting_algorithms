@@ -28,6 +28,7 @@ void insertion_sort_list(listint_t **list)
 					j->next = i;
 					*list = j;
 					print_list(*list);
+					return;
 				}
 				else
 				{
@@ -36,6 +37,7 @@ void insertion_sort_list(listint_t **list)
 					i->prev = j;
 					j->prev->next = j;
 					print_list(*list);
+					return;
 				}
 			}
 			else
