@@ -1,71 +1,53 @@
 #include "sort.h"
 
+/**
+ * swap_nodes - Swaps two nodes
+ * @node1: Pointer to address of node 1
+ * @node2: Pointer to address of node 2
+ * @list: blbla
+ * Return: Nothing
+ */
+void swap_nodes(listint_t **list, listint_t **node1, listint_t **node2)
+{
+	listint_t *tmp = (*node1)->prev;
+
+	(*node1)->next = (*node2)->next;
+
+	if ((*node2)->next != NULL)
+		(*node2)->next->prev = *node1;
+
+	(*node1)->prev = *node2;
+	(*node2)->next = *node1;
+	(*node2)->prev = tmp;
+
+	if ((*node2)->prev != NULL)
+		(*node2)->prev->next = *node2;
+	else
+		*list = *node2;
+}
+
+/**
+ * insertion_sort_list - Sorts a doubly linked list using Insertion Sort
+ * @list: Pointer to head of the linked list
+ * Return: Nothing
+ */
 void insertion_sort_list(listint_t **list)
 {
-	listint_t *i = NULL;
-	listint_t *j = (*list)->next;
-	listint_t *tmp = j;
+	listint_t *actual = NULL, *key = NULL;
 
-	if (list == NULL || (*list)->next == NULL)
+	if (!list || !(*list))
 		return;
 
-	while (tmp)
+	for (actual = *list; actual != NULL; actual = actual->next)
 	{
-		i = tmp->prev;
-		while ((i->prev != NULL) && (i->prev->n > j->n))
+		while (actual->next != NULL && actual->n > actual->next->n)
 		{
-			i = i->prev;
-		}
-		if ((j->n) < (i->n))
-		{
-			if (tmp->next == NULL)
+			key = actual->next;
+			while (key->prev != NULL && key->n < key->prev->n)
 			{
-				j->prev->next = NULL;
-				if (i->prev == NULL)
-				{
-					i->prev = j;
-					j->prev = NULL;
-					j->next = i;
-					*list = j;
-					print_list(*list);
-					return;
-				}
-				else
-				{
-					j->prev = i->prev;
-					j->next = i;
-					i->prev = j;
-					j->prev->next = j;
-					print_list(*list);
-					return;
-				}
-			}
-			else
-			{
-				tmp = j->next;
-				if (i->prev == NULL)
-				{
-					j->prev->next = j->next;
-					j->next->prev = j->prev;
-					i->prev = j;
-					j->prev = NULL;
-					j->next = i;
-					*list = j;
-					print_list(*list);
-				}
-				else
-				{
-					j->prev->next = j->next;
-					j->next->prev = j->prev;
-					j->next = i;
-					j->prev = i->prev;
-					j->prev->next = j;
-					i->prev = j;
-					print_list(*list);
-				}
+				swap_nodes(list, &key->prev, &key);
+				print_list(*list);
 			}
 		}
-		tmp = j->next;
-		j = tmp;
 	}
 }
