@@ -1,9 +1,9 @@
 #include "sort.h"
 
 /**
- * quick_sort - function that sorts an array with lomuto scheme
- * @array: array to sort
- * @size: size of array
+ * quick_sort - quicksort an array
+ * @array: array to be sorted
+ * @size: size of the array
  */
 
 void quick_sort(int *array, size_t size)
@@ -11,52 +11,49 @@ void quick_sort(int *array, size_t size)
 	int lo = 0;
 	int hi = size - 1;
 
-	if (!array || size < 2)
-		return;
 	recursive(array, size, lo, hi);
 }
 
 /**
- * partition - arranges the array with a pivot in account
- * @array: array to check
+ * partition - organize the subarray
+ * @array: array to sort
  * @size: size of array
  * @lo: lowest index
  * @hi: highest index
- * Return: i as the pivot
+ * Return: index of pivot
  */
 
 int partition(int *array, size_t size, int lo, int hi)
 {
-	int pivot = array[lo];
-	int save = 0;
+	int pivot = array[hi];
 	int i = lo;
-	int j = hi;
+	int j;
+	int save;
 
-	while (i < j)
+	for (j = lo; j < hi; j++)
 	{
-		while (array[i] <= pivot)
-			i++;
-		while (array[j] > pivot)
-			j--;
-		if (i < j)
+		if (array[j] < pivot)
 		{
 			save = array[i];
 			array[i] = array[j];
 			array[j] = save;
-			if (array[i] != array[j])
+			if (array[j] != array[i])
 				print_array(array, size);
+			i++;
 		}
 	}
-	save = array[lo];
-	array[lo] = array[j];
-	array[j] = save;
-	if (array[j] != array[lo])
+	save = array[i];
+	array[i] = array[hi];
+	array[hi] = save;
+	if (array[i] != array[hi])
 		print_array(array, size);
-	return (j);
+	return (i);
 }
+
 /**
- * recursive - recursive function that arranges the sublists
- * @array: array to arrange
+ * recursive - recursive function to sort array
+ * moves lo and hi indexes and partitions the array
+ * @array: array to sort
  * @size: size of array
  * @lo: lowest index
  * @hi: highest index
@@ -69,7 +66,7 @@ void recursive(int *array, size_t size, int lo, int hi)
 	if (lo < hi)
 	{
 		i = partition(array, size, lo, hi);
-		recursive(array, size, lo, i);
+		recursive(array, size, lo, i - 1);
 		recursive(array, size, i + 1, hi);
 	}
 }
